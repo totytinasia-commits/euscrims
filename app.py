@@ -75,7 +75,6 @@ def init_connection():
     creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
     return gspread.authorize(creds)
 
-# Helper function per le credenziali (usato da STAT COMP)
 def ottieni_credenziali():
     try:
         scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
@@ -84,7 +83,6 @@ def ottieni_credenziali():
     except Exception:
         return None
 
-# ID del foglio STAT COMP e GID specifico
 SHEET_ID_STATS = '1VrMCI4AA5zpflxulMVRpjRkVlhpzPHHYj24lSI1LfTw'
 GID_PERSONAL_STATS = '869033822'
 
@@ -300,7 +298,6 @@ with col2:
         summary_fired, summary_hit, summary_acc, summary_kill, summary_dmg, summary_mvp, summary_death = "0", "0", "0.00%", "0", "0", "0", "0"
         summary_revive, summary_oh_shots, summary_oh_hit, summary_oh_acc = "0", "0", "0", "0.00%"
         summary_th_shots, summary_th_hit, summary_th_acc = "0", "0", "0.00%"
-        summary_extra = "0"
         
         faster_banana_val = "-"
         
