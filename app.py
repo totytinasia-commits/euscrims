@@ -34,7 +34,6 @@ st.markdown("""
     }
     .stButton button:hover { background-color: #FFC000 !important; color: #0000FF !important; }
     
-    /* Card metriche con altezza fissa e flexbox per allineamento uniforme */
     .stat-card {
         background-color: #1e2229;
         border: 1px solid #2d333b;
@@ -110,7 +109,6 @@ with col2:
         
     st.markdown("<br>", unsafe_allow_html=True)
     
-    # Pulsanti di navigazione completi
     if st.button("REGISTERED PLAYERS", use_container_width=True): st.session_state.page = 'Player'
     if st.button("REGISTERED TEAMS", use_container_width=True): st.session_state.page = 'Teams'
     if st.button("RULES \ SETTING", use_container_width=True): st.session_state.page = 'Rules'
@@ -302,7 +300,7 @@ with col2:
         summary_fired, summary_hit, summary_acc, summary_kill, summary_dmg, summary_mvp, summary_death = "0", "0", "0.00%", "0", "0", "0", "0"
         summary_revive, summary_oh_shots, summary_oh_hit, summary_oh_acc = "0", "0", "0", "0.00%"
         summary_th_shots, summary_th_hit, summary_th_acc = "0", "0", "0.00%"
-        summary_extra = "0" # <--- AGGIUNTO: Campo extra
+        summary_extra = "0"
         
         faster_banana_val = "-"
         
@@ -328,7 +326,6 @@ with col2:
                     summary_th_shots= format_val(rv[11] if len(rv) > 11 else 0)
                     summary_th_hit  = format_val(rv[12] if len(rv) > 12 else 0)
                     summary_th_acc  = format_val(rv[13] if len(rv) > 13 else 0, is_percentage=True)
-                    # summary_extra = format_val(rv[14] if len(rv) > 14 else 0) # <--- Sblocca se il campo si trova alla colonna successiva (es. indice 14)
 
                 j18_l18 = target_ws.get("J18:L18")
                 if j18_l18 and len(j18_l18) > 0 and len(j18_l18[0]) > 0:
@@ -420,11 +417,10 @@ with col2:
             st.markdown(f"<div class='stat-card'><div class='stat-label'>FASTER BANANA</div><div class='stat-value'>{faster_banana_val}</div></div>", unsafe_allow_html=True)
             st.markdown(f"<div class='stat-card'><div class='stat-label'>ONEHAND ACC%</div><div class='stat-value'>{summary_oh_acc}</div></div>", unsafe_allow_html=True)
             st.markdown(f"<div class='stat-card'><div class='stat-label'>TWOHAND ACC%</div><div class='stat-value'>{summary_th_acc}</div></div>", unsafe_allow_html=True)
-            # st.markdown(f"<div class='stat-card'><div class='stat-label'>NOME CAMPO EXTRA</div><div class='stat-value'>{summary_extra}</div></div>", unsafe_allow_html=True) # <--- AGGIUNTO: Visualizzazione del campo extra nelle card
 
         st.markdown("<br>", unsafe_allow_html=True)
 
-        # --- RENDER UI: DEADLIEST WEAPONS (1, 2, 3) IN BOXES ---
+        # --- RENDER UI: DEADLIEST WEAPONS ---
         st.markdown("<h4 style='color: #93c5fd; font-size: 1rem;'>DEADLIEST WEAPONS</h4>", unsafe_allow_html=True)
         
         for i, dw in enumerate(deadliest_weapons):
@@ -479,11 +475,11 @@ with col2:
         st.dataframe(df_weapons_final, use_container_width=True, hide_index=True)
 
 else:
-        st.markdown("<h2 style='text-align: center; color: #FFD700;'>Player Register</h2>", unsafe_allow_html=True)
-        try:
-            data = init_connection().open_by_key('1qfq7X9IuAcWEhFUuUbNkFfY2ssrmt04r1MFiaCC6ql0').get_worksheet_by_id(155113138).get('D8:D32')
-            df = pd.DataFrame(data, columns=["Player"])
-            df.insert(0, "N.", range(1, len(df) + 1))
-            st.dataframe(df, use_container_width=True, hide_index=True)
-        except Exception as e: 
-            st.error(f"Error: {e}")
+    st.markdown("<h2 style='text-align: center; color: #FFD700;'>Player Register</h2>", unsafe_allow_html=True)
+    try:
+        data = init_connection().open_by_key('1qfq7X9IuAcWEhFUuUbNkFfY2ssrmt04r1MFiaCC6ql0').get_worksheet_by_id(155113138).get('D8:D32')
+        df = pd.DataFrame(data, columns=["Player"])
+        df.insert(0, "N.", range(1, len(df) + 1))
+        st.dataframe(df, use_container_width=True, hide_index=True)
+    except Exception as e: 
+        st.error(f"Error: {e}")
