@@ -316,13 +316,13 @@ with col2:
                     summary_mvp      = format_val(rv[5] if len(rv) > 5 else 0)
                     summary_death    = format_val(rv[6] if len(rv) > 6 else 0)
                     summary_revive   = format_val(rv[7] if len(rv) > 7 else 0)
-                    summary_assist   = format_val(rv[8] if len(rv) > 8 else 0)  # Total Assist aggiunto
-                    summary_oh_shots = format_val(rv[9] if len(rv) > 9 else 0)
-                    summary_oh_hit   = format_val(rv[10] if len(rv) > 10 else 0)
-                    summary_oh_acc   = format_val(rv[11] if len(rv) > 11 else 0, is_percentage=True)
-                    summary_th_shots = format_val(rv[12] if len(rv) > 12 else 0)
-                    summary_th_hit   = format_val(rv[13] if len(rv) > 13 else 0)
-                    summary_th_acc   = format_val(rv[14] if len(rv) > 14 else 0, is_percentage=True)
+                    summary_assist   = format_val(rv[8] if len(rv) > 8 else 0)  # Colonna R (Assist)
+                    summary_oh_shots = format_val(rv[9] if len(rv) > 9 else 0)  # Colonna N
+                    summary_oh_hit   = format_val(rv[10] if len(rv) > 10 else 0) # Colonna O
+                    summary_oh_acc   = format_val(rv[11] if len(rv) > 11 else 0, is_percentage=True) # Colonna P
+                    summary_th_shots = format_val(rv[12] if len(rv) > 12 else 0) # Colonna Q
+                    summary_th_hit   = format_val(rv[13] if len(rv) > 13 else 0) # Colonna R
+                    summary_th_acc   = format_val(rv[14] if len(rv) > 14 else 0, is_percentage=True) # Colonna S
 
                 j18_l18 = target_ws.get("J18:L18")
                 if j18_l18 and len(j18_l18) > 0 and len(j18_l18[0]) > 0:
@@ -366,6 +366,7 @@ with col2:
                             "twohand": "0", "shit_twohand": "0", "acc_twohand": "0.00%"
                         })
 
+                # Mappatura tabella armi dettagliate con indici corretti
                 weapons_raw = target_ws.get("F33:S74")
                 if weapons_raw:
                     for r_data in weapons_raw:
@@ -380,12 +381,12 @@ with col2:
                                     "DMG": format_val(r_data[4] if len(r_data) > 4 else 0),
                                     "HEADSHOT": format_val(r_data[5] if len(r_data) > 5 else 0),
                                     "MAX DISTANCE": format_val(r_data[6] if len(r_data) > 6 else 0),
-                                    "SHOT ONE": format_val(r_data[8] if len(r_data) > 8 else 0),
-                                    "SHOT HIT ONE": format_val(r_data[9] if len(r_data) > 9 else 0),
-                                    "ACC% ONE": format_val(r_data[10] if len(r_data) > 10 else 0, is_percentage=True),
-                                    "SHOT TWO": format_val(r_data[11] if len(r_data) > 11 else 0),
-                                    "SHOT HIT TWO": format_val(r_data[12] if len(r_data) > 12 else 0),
-                                    "ACC% TWO": format_val(r_data[13] if len(r_data) > 13 else 0, is_percentage=True)
+                                    "SHOT ONE": format_val(r_data[8] if len(r_data) > 8 else 0),          # Colonna N
+                                    "SHOT HIT ONE": format_val(r_data[9] if len(r_data) > 9 else 0),      # Colonna O
+                                    "ACC% ONE": format_val(r_data[10] if len(r_data) > 10 else 0, is_percentage=True), # Colonna P
+                                    "SHOT TWO": format_val(r_data[11] if len(r_data) > 11 else 0),        # Colonna Q
+                                    "SHOT HIT TWO": format_val(r_data[12] if len(r_data) > 12 else 0),    # Colonna R
+                                    "ACC% TWO": format_val(r_data[13] if len(r_data) > 13 else 0, is_percentage=True)  # Colonna S
                                 })
         except Exception as e:
             st.warning(f"Error reading dashboard data: {e}")
