@@ -306,7 +306,7 @@ with col2:
         try:
             if target_ws:
                 # Lettura riga 15 (colonne da F a S) -> indice 0=F, 1=G, 2=H, 3=I, 4=J, 5=K, 6=L, 7=M, 8=N, 9=O, 10=P, 11=Q, 12=R, 13=S
-                f15_s15 = target_ws.get("F15:S15")
+                f15_s15 = target_ws.get("F16:S16")
                 if f15_s15 and len(f15_s15) > 0:
                     rv = f15_s15[0]
                     summary_fired    = format_val(rv[0] if len(rv) > 0 else 0)  # F15
