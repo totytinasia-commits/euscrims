@@ -305,28 +305,34 @@ with col2:
 
         try:
             if target_ws:
-                f16_s16 = target_ws.get("F16:T16")
-                if f16_s16 and len(f16_s16) > 0:
-                    rv = f16_s16[0]
-                    summary_fired    = format_val(rv[0] if len(rv) > 0 else 0)
-                    summary_hit      = format_val(rv[1] if len(rv) > 1 else 0)
-                    summary_acc      = format_val(rv[2] if len(rv) > 2 else 0, is_percentage=True)
-                    summary_kill     = format_val(rv[3] if len(rv) > 3 else 0)
-                    summary_dmg      = format_val(rv[4] if len(rv) > 4 else 0)
-                    summary_mvp      = format_val(rv[5] if len(rv) > 5 else 0)
-                    summary_death    = format_val(rv[6] if len(rv) > 6 else 0)
-                    summary_revive   = format_val(rv[7] if len(rv) > 7 else 0)
-                    summary_assist   = format_val(rv[8] if len(rv) > 8 else 0)  # Colonna R (Assist)
-                    summary_oh_shots = format_val(rv[9] if len(rv) > 9 else 0)  # Colonna N
-                    summary_oh_hit   = format_val(rv[10] if len(rv) > 10 else 0) # Colonna O
-                    summary_oh_acc   = format_val(rv[11] if len(rv) > 11 else 0, is_percentage=True) # Colonna P
-                    summary_th_shots = format_val(rv[12] if len(rv) > 12 else 0) # Colonna Q
-                    summary_th_hit   = format_val(rv[13] if len(rv) > 13 else 0) # Colonna R
-                    summary_th_acc   = format_val(rv[14] if len(rv) > 14 else 0, is_percentage=True) # Colonna S
+                # Lettura riga 15 (colonne da F a S) -> indice 0=F, 1=G, 2=H, 3=I, 4=J, 5=K, 6=L, 7=M, 8=N, 9=O, 10=P, 11=Q, 12=R, 13=S
+                f15_s15 = target_ws.get("F15:S15")
+                if f15_s15 and len(f15_s15) > 0:
+                    rv = f15_s15[0]
+                    summary_fired    = format_val(rv[0] if len(rv) > 0 else 0)  # F15
+                    summary_hit      = format_val(rv[1] if len(rv) > 1 else 0)  # G15
+                    summary_acc      = format_val(rv[2] if len(rv) > 2 else 0, is_percentage=True) # H15
+                    summary_kill     = format_val(rv[3] if len(rv) > 3 else 0)  # I15
+                    summary_dmg      = format_val(rv[4] if len(rv) > 4 else 0)  # J15
+                    summary_mvp      = format_val(rv[5] if len(rv) > 5 else 0)  # K15
+                    summary_death    = format_val(rv[6] if len(rv) > 6 else 0)  # L15
+                    summary_revive   = format_val(rv[7] if len(rv) > 7 else 0)  # M15
+                    summary_oh_shots = format_val(rv[8] if len(rv) > 8 else 0)  # ONEHAND (N15)
+                    summary_oh_hit   = format_val(rv[9] if len(rv) > 9 else 0)  # SHIT ONEHAND (O15)
+                    summary_oh_acc   = format_val(rv[10] if len(rv) > 10 else 0, is_percentage=True) # ACC% ONE (P15)
+                    summary_th_shots = format_val(rv[11] if len(rv) > 11 else 0) # TWOHAND (Q15)
+                    summary_th_hit   = format_val(rv[12] if len(rv) > 12 else 0) # SHIT TWOHAND (R15)
+                    summary_th_acc   = format_val(rv[13] if len(rv) > 13 else 0, is_percentage=True) # ACC% 2hands (S15)
 
-                j18_l18 = target_ws.get("J18:L18")
-                if j18_l18 and len(j18_l18) > 0 and len(j18_l18[0]) > 0:
-                    faster_banana_val = format_val(j18_l18[0][0])
+                # Assist (cella QRS 18 -> interpretato come Q18 o R18, usiamo cella R18 o cella dedicata S18 se richiesto, qui leggiamo R18)
+                assist_val = target_ws.get("R18")
+                if assist_val and len(assist_val) > 0 and len(assist_val[0]) > 0:
+                    summary_assist = format_val(assist_val[0][0])
+
+                # Banana (cella J18)
+                banana_val = target_ws.get("J18")
+                if banana_val and len(banana_val) > 0 and len(banana_val[0]) > 0:
+                    faster_banana_val = format_val(banana_val[0][0])
 
                 dw_configs = [
                     {"name_range": "H20:I20", "data_range": "H21:S21"},
@@ -366,7 +372,6 @@ with col2:
                             "twohand": "0", "shit_twohand": "0", "acc_twohand": "0.00%"
                         })
 
-                # Mappatura tabella armi dettagliate con indici corretti
                 weapons_raw = target_ws.get("F33:S74")
                 if weapons_raw:
                     for r_data in weapons_raw:
@@ -381,12 +386,12 @@ with col2:
                                     "DMG": format_val(r_data[4] if len(r_data) > 4 else 0),
                                     "HEADSHOT": format_val(r_data[5] if len(r_data) > 5 else 0),
                                     "MAX DISTANCE": format_val(r_data[6] if len(r_data) > 6 else 0),
-                                    "SHOT ONE": format_val(r_data[8] if len(r_data) > 8 else 0),          # Colonna N
-                                    "SHOT HIT ONE": format_val(r_data[9] if len(r_data) > 9 else 0),      # Colonna O
-                                    "ACC% ONE": format_val(r_data[10] if len(r_data) > 10 else 0, is_percentage=True), # Colonna P
-                                    "SHOT TWO": format_val(r_data[11] if len(r_data) > 11 else 0),        # Colonna Q
-                                    "SHOT HIT TWO": format_val(r_data[12] if len(r_data) > 12 else 0),    # Colonna R
-                                    "ACC% TWO": format_val(r_data[13] if len(r_data) > 13 else 0, is_percentage=True)  # Colonna S
+                                    "SHOT ONE": format_val(r_data[8] if len(r_data) > 8 else 0),
+                                    "SHOT HIT ONE": format_val(r_data[9] if len(r_data) > 9 else 0),
+                                    "ACC% ONE": format_val(r_data[10] if len(r_data) > 10 else 0, is_percentage=True),
+                                    "SHOT TWO": format_val(r_data[11] if len(r_data) > 11 else 0),
+                                    "SHOT HIT TWO": format_val(r_data[12] if len(r_data) > 12 else 0),
+                                    "ACC% TWO": format_val(r_data[13] if len(r_data) > 13 else 0, is_percentage=True)
                                 })
         except Exception as e:
             st.warning(f"Error reading dashboard data: {e}")
