@@ -116,7 +116,6 @@ with col2:
     
     page = st.session_state.page
 
-    # DYNAMIC CONTENT
     if page == 'Rules':
         st.markdown("<h2 style='text-align: center; color: #FFD700;'>SCORE</h2>", unsafe_allow_html=True)
         st.dataframe(pd.DataFrame({
@@ -295,7 +294,7 @@ with col2:
             except Exception:
                 return str(val) if val is not None and str(val).strip() != "" else ("0.00%" if is_percentage else "0")
 
-        summary_fired, summary_hit, summary_acc, summary_kill, summary_dmg, summary_mvp, summary_death = "0", "0", "0.00%", "0", "0", "0", "0"
+        summary_fired, summary_hit, summary_acc, summary_kill, summary_dmg, summary_mvp, summary_death, summary_assist = "0", "0", "0.00%", "0", "0", "0", "0", "0"
         summary_revive, summary_oh_shots, summary_oh_hit, summary_oh_acc = "0", "0", "0", "0.00%"
         summary_th_shots, summary_th_hit, summary_th_acc = "0", "0", "0.00%"
         
@@ -306,23 +305,24 @@ with col2:
 
         try:
             if target_ws:
-                f16_s16 = target_ws.get("F16:S16")
+                f16_s16 = target_ws.get("F16:T16")
                 if f16_s16 and len(f16_s16) > 0:
                     rv = f16_s16[0]
-                    summary_fired   = format_val(rv[0] if len(rv) > 0 else 0)
-                    summary_hit     = format_val(rv[1] if len(rv) > 1 else 0)
-                    summary_acc     = format_val(rv[2] if len(rv) > 2 else 0, is_percentage=True)
-                    summary_kill    = format_val(rv[3] if len(rv) > 3 else 0)
-                    summary_dmg     = format_val(rv[4] if len(rv) > 4 else 0)
-                    summary_mvp     = format_val(rv[5] if len(rv) > 5 else 0)
-                    summary_death   = format_val(rv[6] if len(rv) > 6 else 0)
-                    summary_revive  = format_val(rv[7] if len(rv) > 7 else 0)
-                    summary_oh_shots= format_val(rv[8] if len(rv) > 8 else 0)
-                    summary_oh_hit  = format_val(rv[9] if len(rv) > 9 else 0)
-                    summary_oh_acc  = format_val(rv[10] if len(rv) > 10 else 0, is_percentage=True)
-                    summary_th_shots= format_val(rv[11] if len(rv) > 11 else 0)
-                    summary_th_hit  = format_val(rv[12] if len(rv) > 12 else 0)
-                    summary_th_acc  = format_val(rv[13] if len(rv) > 13 else 0, is_percentage=True)
+                    summary_fired    = format_val(rv[0] if len(rv) > 0 else 0)
+                    summary_hit      = format_val(rv[1] if len(rv) > 1 else 0)
+                    summary_acc      = format_val(rv[2] if len(rv) > 2 else 0, is_percentage=True)
+                    summary_kill     = format_val(rv[3] if len(rv) > 3 else 0)
+                    summary_dmg      = format_val(rv[4] if len(rv) > 4 else 0)
+                    summary_mvp      = format_val(rv[5] if len(rv) > 5 else 0)
+                    summary_death    = format_val(rv[6] if len(rv) > 6 else 0)
+                    summary_revive   = format_val(rv[7] if len(rv) > 7 else 0)
+                    summary_assist   = format_val(rv[8] if len(rv) > 8 else 0)  # Total Assist aggiunto
+                    summary_oh_shots = format_val(rv[9] if len(rv) > 9 else 0)
+                    summary_oh_hit   = format_val(rv[10] if len(rv) > 10 else 0)
+                    summary_oh_acc   = format_val(rv[11] if len(rv) > 11 else 0, is_percentage=True)
+                    summary_th_shots = format_val(rv[12] if len(rv) > 12 else 0)
+                    summary_th_hit   = format_val(rv[13] if len(rv) > 13 else 0)
+                    summary_th_acc   = format_val(rv[14] if len(rv) > 14 else 0, is_percentage=True)
 
                 j18_l18 = target_ws.get("J18:L18")
                 if j18_l18 and len(j18_l18) > 0 and len(j18_l18[0]) > 0:
@@ -411,13 +411,13 @@ with col2:
         with c_grid3:
             st.markdown(f"<div class='stat-card'><div class='stat-label'>MVP</div><div class='stat-value'>{summary_mvp}</div></div>", unsafe_allow_html=True)
             st.markdown(f"<div class='stat-card'><div class='stat-label'>ACCURACY</div><div class='stat-value'>{summary_acc}</div></div>", unsafe_allow_html=True)
-            st.markdown(f"<div class='stat-card'><div class='stat-label'>FASTER BANANA</div><div class='stat-value'>{faster_banana_val}</div></div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='stat-card'><div class='stat-label'>ASSISTS</div><div class='stat-value'>{summary_assist}</div></div>", unsafe_allow_html=True)
             st.markdown(f"<div class='stat-card'><div class='stat-label'>ONEHAND ACC%</div><div class='stat-value'>{summary_oh_acc}</div></div>", unsafe_allow_html=True)
             st.markdown(f"<div class='stat-card'><div class='stat-label'>TWOHAND ACC%</div><div class='stat-value'>{summary_th_acc}</div></div>", unsafe_allow_html=True)
 
         st.markdown("<br>", unsafe_allow_html=True)
 
-        # --- RENDER UI: DEADLIEST WEAPONS ---
+        # --- RENDER UI: DEADLIEST WEAPONS (1, 2, 3) IN BOXES ---
         st.markdown("<h4 style='color: #93c5fd; font-size: 1rem;'>DEADLIEST WEAPONS</h4>", unsafe_allow_html=True)
         
         for i, dw in enumerate(deadliest_weapons):
@@ -471,12 +471,12 @@ with col2:
 
         st.dataframe(df_weapons_final, use_container_width=True, hide_index=True)
 
-else:
-    st.markdown("<h2 style='text-align: center; color: #FFD700;'>Player Register</h2>", unsafe_allow_html=True)
-    try:
-        data = init_connection().open_by_key('1qfq7X9IuAcWEhFUuUbNkFfY2ssrmt04r1MFiaCC6ql0').get_worksheet_by_id(155113138).get('D8:D32')
-        df = pd.DataFrame(data, columns=["Player"])
-        df.insert(0, "N.", range(1, len(df) + 1))
-        st.dataframe(df, use_container_width=True, hide_index=True)
-    except Exception as e: 
-        st.error(f"Error: {e}")
+    else:
+        st.markdown("<h2 style='text-align: center; color: #FFD700;'>Player Register</h2>", unsafe_allow_html=True)
+        try:
+            data = init_connection().open_by_key('1qfq7X9IuAcWEhFUuUbNkFfY2ssrmt04r1MFiaCC6ql0').get_worksheet_by_id(155113138).get('D8:D32')
+            df = pd.DataFrame(data, columns=["Player"])
+            df.insert(0, "N.", range(1, len(df) + 1))
+            st.dataframe(df, use_container_width=True, hide_index=True)
+        except Exception as e: 
+            st.error(f"Error: {e}")
