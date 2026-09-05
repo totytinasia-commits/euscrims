@@ -396,32 +396,23 @@ with col2:
         except Exception as e:
             st.warning(f"Error reading dashboard data: {e}")
 
-        # --- RENDER UI: MATCH SUMMARY ---
+       # --- RENDER UI: MATCH SUMMARY ---
         st.markdown("<h4 style='color: #93c5fd; font-size: 1rem;'>MATCH SUMMARY</h4>", unsafe_allow_html=True)
-        c_grid1, c_grid2, c_grid3 = st.columns(3)
         
-        with c_grid1:
-            st.markdown(f"<div class='stat-card'><div class='stat-label'>DMG</div><div class='stat-value'>{summary_dmg}</div></div>", unsafe_allow_html=True)
-            st.markdown(f"<div class='stat-card'><div class='stat-label'>SHOTS FIRED</div><div class='stat-value'>{summary_fired}</div></div>", unsafe_allow_html=True)
-            st.markdown(f"<div class='stat-card'><div class='stat-label'>DEATH</div><div class='stat-value'>{summary_death}</div></div>", unsafe_allow_html=True)
-            st.markdown(f"<div class='stat-card'><div class='stat-label'>ONEHAND SHOTS</div><div class='stat-value'>{summary_oh_shots}</div></div>", unsafe_allow_html=True)
-            st.markdown(f"<div class='stat-card'><div class='stat-label'>TWOHAND SHOTS</div><div class='stat-value'>{summary_th_shots}</div></div>", unsafe_allow_html=True)
+        def render_metric_row(m1, m2, m3):
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                st.markdown(f"<div class='stat-card'><div class='stat-label'>{m1[0]}</div><div class='stat-value'>{m1[1]}</div></div>", unsafe_allow_html=True)
+            with col2:
+                st.markdown(f"<div class='stat-card'><div class='stat-label'>{m2[0]}</div><div class='stat-value'>{m2[1]}</div></div>", unsafe_allow_html=True)
+            with col3:
+                st.markdown(f"<div class='stat-card'><div class='stat-label'>{m3[0]}</div><div class='stat-value'>{m3[1]}</div></div>", unsafe_allow_html=True)
 
-        with c_grid2:
-            st.markdown(f"<div class='stat-card'><div class='stat-label'>KILL</div><div class='stat-value'>{summary_kill}</div></div>", unsafe_allow_html=True)
-            st.markdown(f"<div class='stat-card'><div class='stat-label'>SHOTS HIT</div><div class='stat-value'>{summary_hit}</div></div>", unsafe_allow_html=True)
-            st.markdown(f"<div class='stat-card'><div class='stat-label'>REVIVE</div><div class='stat-value'>{summary_revive}</div></div>", unsafe_allow_html=True)
-            st.markdown(f"<div class='stat-card'><div class='stat-label'>ONEHAND HIT</div><div class='stat-value'>{summary_oh_hit}</div></div>", unsafe_allow_html=True)
-            st.markdown(f"<div class='stat-card'><div class='stat-label'>TWOHAND HIT</div><div class='stat-value'>{summary_th_hit}</div></div>", unsafe_allow_html=True)
-
-        with c_grid3:
-            st.markdown(f"<div class='stat-card'><div class='stat-label'>MVP</div><div class='stat-value'>{summary_mvp}</div></div>", unsafe_allow_html=True)
-            st.markdown(f"<div class='stat-card'><div class='stat-label'>ACCURACY</div><div class='stat-value'>{summary_acc}</div></div>", unsafe_allow_html=True)
-            st.markdown(f"<div class='stat-card'><div class='stat-label'>ASSISTS</div><div class='stat-value'>{summary_assist}</div></div>", unsafe_allow_html=True)
-            st.markdown(f"<div class='stat-card'><div class='stat-label'>ONEHAND ACC%</div><div class='stat-value'>{summary_oh_acc}</div></div>", unsafe_allow_html=True)
-            st.markdown(f"<div class='stat-card'><div class='stat-label'>TWOHAND ACC%</div><div class='stat-value'>{summary_th_acc}</div></div>", unsafe_allow_html=True)
-
-        st.markdown("<br>", unsafe_allow_html=True)
+        render_metric_row(("DMG", summary_dmg), ("KILL", summary_kill), ("MVP", summary_mvp))
+        render_metric_row(("SHOTS FIRED", summary_fired), ("SHOTS HIT", summary_hit), ("ACCURACY", summary_acc))
+        render_metric_row(("DEATH", summary_death), ("REVIVE", summary_revive), ("ASSISTS", summary_assist))
+        render_metric_row(("ONEHAND SHOTS", summary_oh_shots), ("ONEHAND HIT", summary_oh_hit), ("ONEHAND ACC%", summary_oh_acc))
+        render_metric_row(("TWOHAND SHOTS", summary_th_shots), ("TWOHAND HIT", summary_th_hit), ("TWOHAND ACC%", summary_th_acc))
 
         # --- RENDER UI: DEADLIEST WEAPONS (1, 2, 3) IN BOXES ---
         st.markdown("<h4 style='color: #93c5fd; font-size: 1rem;'>DEADLIEST WEAPONS</h4>", unsafe_allow_html=True)
