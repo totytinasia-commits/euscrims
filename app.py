@@ -325,7 +325,7 @@ with col2:
                     summary_th_acc   = format_val(rv[13] if len(rv) > 13 else 0, is_percentage=True) # ACC% 2hands (S15)
 
                 # Assist (cella QRS 18 -> interpretato come Q18 o R18, usiamo cella R18 o cella dedicata S18 se richiesto, qui leggiamo R18)
-                assist_val = target_ws.get("R17")
+                assist_val = target_ws.get("q17")
                 if assist_val and len(assist_val) > 0 and len(assist_val[0]) > 0:
                     summary_assist = format_val(assist_val[0][0])
 
